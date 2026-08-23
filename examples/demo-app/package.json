@@ -1,0 +1,21 @@
+{
+  "name": "radarflow-demo-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example instrumented application demonstrating RadarFlow Observability",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "demo:traffic": "tsx src/traffic-generator.ts --mode=normal",
+    "demo:error": "tsx src/traffic-generator.ts --mode=error",
+    "demo:incident": "tsx src/traffic-generator.ts --mode=incident"
+  },
+  "dependencies": {
+    "@radarflow/sdk": "workspace:*",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

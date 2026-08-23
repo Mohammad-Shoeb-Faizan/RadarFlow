@@ -1,0 +1,33 @@
+{
+  "name": "radarflow-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source observability for modern applications",
+  "scripts": {
+    "dev": "pnpm --filter @radarflow/web dev",
+    "build": "pnpm --filter @radarflow/sdk build && pnpm --filter @radarflow/web build",
+    "test": "pnpm --filter @radarflow/sdk test && pnpm --filter @radarflow/web test",
+    "db:generate": "pnpm --filter @radarflow/web db:generate",
+    "db:push": "pnpm --filter @radarflow/web db:push",
+    "db:seed": "pnpm --filter @radarflow/web db:seed",
+    "lint": "pnpm --filter @radarflow/web lint",
+    "typecheck": "pnpm --filter @radarflow/sdk typecheck && pnpm --filter @radarflow/web typecheck"
+  },
+  "keywords": [
+    "observability",
+    "opentelemetry",
+    "monitoring",
+    "logs",
+    "metrics",
+    "traces",
+    "incidents",
+    "ai"
+  ],
+  "author": "RadarFlow Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@10.29.3"
+}
