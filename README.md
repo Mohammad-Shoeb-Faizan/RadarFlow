@@ -12,7 +12,7 @@
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)](https://www.docker.com/)
 
-[Quick Start](#-quick-start) • [Architecture](#-architecture) • [SDK Usage](#-sdk-usage) • [AI Investigation](#-ai-incident-analysis) • [Self-Hosting](#-docker-setup)
+[Quick Start](#-quick-start) • [Architecture](docs/architecture.md) • [SDK Usage](docs/sdk-usage.md) • [AI Investigation](docs/ai-investigation.md) • [Self-Hosting](docs/self-hosting.md)
 
 </div>
 
@@ -60,8 +60,8 @@ See [docs/architecture.md](docs/architecture.md) for full architectural design a
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/radarflow/radarflow.git
-cd radarflow
+git clone https://github.com/Mohammad-Shoeb-Faizan/RadarFlow.git
+cd RadarFlow
 
 # 2. Copy environment template
 cp .env.example .env
@@ -72,26 +72,36 @@ docker compose up -d
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+See [docs/self-hosting.md](docs/self-hosting.md) for comprehensive self-hosting, environment variables, and persistence details.
+
 ---
 
 ### Option 2: Local Development
 
 ```bash
-# 1. Install dependencies
+# 1. Clone repository
+git clone https://github.com/Mohammad-Shoeb-Faizan/RadarFlow.git
+cd RadarFlow
+
+# 2. Install dependencies
 pnpm install
 
-# 2. Seed realistic baseline data
+# 3. Seed development baseline data
 pnpm run db:seed
 
-# 3. Start Next.js development server
+# 4. Start Next.js development server
 pnpm dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000).
 
-Default credentials:
-- **Email**: `admin@radarflow.io`
-- **Password**: `admin123`
+### Demo / Local Development
+
+The seed script creates development/demo data.
+
+For production deployments, create your own account and credentials.
+
+Do not use development credentials in a production deployment.
 
 ---
 
@@ -118,42 +128,29 @@ const radar = new RadarFlow({
 });
 ```
 
-### 1. Tracking Metrics
+### Quick Code Examples
 
 ```typescript
+// 1. Numerical Metric
 radar.trackMetric("http.request.duration", 421, {
   unit: "ms",
   tags: { route: "/api/orders", status: "200" },
 });
-```
 
-### 2. Capturing Errors & Exceptions
+// 2. Exception Capture
+radar.captureError(error, {
+  message: "Database connection timeout",
+  attributes: { pool: "primary-pg" },
+});
 
-```typescript
-try {
-  await database.connect();
-} catch (error) {
-  radar.captureError(error, {
-    message: "Database connection timeout",
-    attributes: { pool: "primary-pg", host: "db-1" },
-  });
-}
-```
-
-### 3. Distributed Tracing
-
-```typescript
+// 3. Distributed Tracing
 await radar.trace("processOrder", async (span) => {
   span.setAttribute("order.id", "ord_78912");
-
-  // Child span
-  const dbSpan = span.startChildSpan("postgres.query");
-  const order = await db.query("SELECT * FROM orders WHERE id = $1", ["ord_78912"]);
-  dbSpan.end();
-
-  return order;
+  return await db.orders.process();
 });
 ```
+
+See [docs/sdk-usage.md](docs/sdk-usage.md) for the complete SDK reference, Express middleware, Next.js wrappers, and span tracing guides.
 
 ---
 
@@ -174,6 +171,8 @@ RadarFlow provides optional AI root-cause analysis powered by Google Gemini:
    - **Recommended Investigation Steps**.
 
 > **Note**: RadarFlow functions completely without an AI key. AI is an enhancement, not a requirement.
+
+See [docs/ai-investigation.md](docs/ai-investigation.md) for prompt architecture, schema definitions, and privacy details.
 
 ---
 

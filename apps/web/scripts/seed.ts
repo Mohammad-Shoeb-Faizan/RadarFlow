@@ -23,11 +23,14 @@ async function main() {
   const orgId = "org_radarflow";
   const projectId = "prj_default";
 
+  const adminEmail = process.env.DEMO_ADMIN_EMAIL || "admin@radarflow.io";
+  const adminPassword = process.env.DEMO_ADMIN_PASSWORD || "admin123";
+
   // 1. Create Default User
-  const passwordHash = await hashPassword("admin123");
+  const passwordHash = await hashPassword(adminPassword);
   await db.insert(users).values({
     id: userId,
-    email: "admin@radarflow.io",
+    email: adminEmail,
     passwordHash,
     name: "Alex Dev",
     role: "owner",
@@ -216,7 +219,7 @@ async function main() {
   }
 
   console.log("✓ Database seed complete!");
-  console.log(`Login credentials: admin@radarflow.io / admin123`);
+  console.log(`Demo login: ${adminEmail} / ${adminPassword}`);
   console.log(`Master API Key: ${rawKey}`);
 }
 
