@@ -55,6 +55,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!projectId) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Failed to resolve project identifier" } },
+        { status: 401 }
+      );
+    }
+
     const result = await processTelemetryBatch(projectId, payload);
 
     return NextResponse.json(result, { status: 202 });
