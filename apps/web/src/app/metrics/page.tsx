@@ -47,32 +47,32 @@ export default function MetricsPage() {
   const currentMetric = metricsList.find((m) => m.id === metricName) || metricsList[0];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4 sm:pb-5">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          <h1 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
             Metrics & Time-series
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
             Aggregated system and application telemetry with p50, p95, and p99 percentiles.
           </p>
         </div>
 
-        <Button variant="outline" size="sm" onClick={fetchMetricData} disabled={isLoading} className="gap-1.5 text-xs">
+        <Button variant="outline" size="sm" onClick={fetchMetricData} disabled={isLoading} className="gap-1.5 text-xs font-mono h-8">
           <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
           <span>Refresh</span>
         </Button>
       </div>
 
       {/* Metric Selector Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/80 bg-card p-3 shadow-sm">
-        <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-xl border border-border/80 bg-card p-3 shadow-sm">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {metricsList.map((m) => (
             <button
               key={m.id}
               onClick={() => setMetricName(m.id)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-mono font-medium transition-all ${
+              className={`rounded-lg px-2.5 sm:px-3 py-1.5 text-xs font-mono font-medium transition-all shrink-0 ${
                 metricName === m.id
                   ? "bg-primary/20 text-primary border border-primary/40 shadow-sm"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -84,12 +84,12 @@ export default function MetricsPage() {
         </div>
 
         {/* Time Range Selector */}
-        <div className="flex items-center gap-2 font-mono text-xs">
+        <div className="flex items-center gap-2 font-mono text-xs shrink-0">
           <span className="text-muted-foreground">Range:</span>
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="h-8 rounded-md border border-input bg-card px-2.5 text-xs text-foreground focus:outline-none"
+            className="h-8 rounded-md border border-input bg-card px-2 text-xs text-foreground focus:outline-none"
           >
             <option value="15m">Last 15m</option>
             <option value="1h">Last 1h</option>
@@ -109,11 +109,11 @@ export default function MetricsPage() {
         color={currentMetric.color}
         gradientId="mainMetricGrad"
         summary={data.summary}
-        height={320}
+        height={260}
       />
 
       {/* Secondary Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-2">
         <MetricChart
           title="HTTP Error Rate"
           data={data.series || []}

@@ -110,8 +110,8 @@ export function CommandPalette({
     },
     {
       id: "nav-deployments",
-      name: "Deployments",
-      category: "Navigation",
+      name: "Deployments Correlation",
+      category: "Telemetry",
       icon: Rocket,
       shortcut: "G D",
       action: () => {
@@ -121,7 +121,7 @@ export function CommandPalette({
     },
     {
       id: "nav-settings",
-      name: "Project Settings & API Keys",
+      name: "Settings & API Keys",
       category: "Navigation",
       icon: Settings,
       action: () => {
@@ -130,8 +130,8 @@ export function CommandPalette({
       },
     },
     {
-      id: "act-traffic",
-      name: "Generate Demo Traffic",
+      id: "act-generate-traffic",
+      name: "Demo: Generate Telemetry Traffic",
       category: "Actions",
       icon: Zap,
       action: () => {
@@ -140,8 +140,8 @@ export function CommandPalette({
       },
     },
     {
-      id: "act-simulate",
-      name: "Simulate Incident (DB Saturation)",
+      id: "act-simulate-incident",
+      name: "Demo: Simulate DB Saturation Incident",
       category: "Actions",
       icon: Flame,
       action: () => {
@@ -150,8 +150,8 @@ export function CommandPalette({
       },
     },
     {
-      id: "act-reset",
-      name: "Reset Demo Telemetry",
+      id: "act-reset-demo",
+      name: "Demo: Reset Telemetry & Incidents",
       category: "Actions",
       icon: RotateCcw,
       action: () => {
@@ -161,16 +161,18 @@ export function CommandPalette({
     },
   ];
 
-  const filteredCommands = commands.filter((c) =>
-    c.name.toLowerCase().includes(query.toLowerCase()) ||
-    c.category.toLowerCase().includes(query.toLowerCase())
+  const filteredCommands = commands.filter(
+    (c) =>
+      c.name.toLowerCase().includes(query.toLowerCase()) ||
+      c.category.toLowerCase().includes(query.toLowerCase())
   );
 
   useEffect(() => {
     if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 50);
+    } else {
       setQuery("");
       setSelectedIndex(0);
-      setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [isOpen]);
 
@@ -202,13 +204,13 @@ export function CommandPalette({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-background/80 backdrop-blur-sm px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 bg-background/80 backdrop-blur-sm px-3 sm:px-4">
       <div
-        className="w-full max-w-lg rounded-xl border border-border/80 bg-card shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150"
+        className="w-full max-w-lg rounded-xl border border-border/80 bg-card shadow-2xl overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150 flex flex-col max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}
-        <div className="flex items-center border-b border-border/80 px-3.5 py-2.5">
+        <div className="flex items-center border-b border-border/80 px-3.5 py-2.5 shrink-0">
           <Search className="h-4 w-4 text-muted-foreground mr-2.5 shrink-0" />
           <input
             ref={inputRef}
@@ -223,14 +225,14 @@ export function CommandPalette({
           />
           <button
             onClick={onClose}
-            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent"
+            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Command List */}
-        <div className="max-h-80 overflow-y-auto p-1.5">
+        <div className="max-h-64 sm:max-h-80 overflow-y-auto p-1.5 flex-1">
           {filteredCommands.length === 0 ? (
             <div className="py-6 text-center text-xs text-muted-foreground">
               No matching commands or pages found.
@@ -250,15 +252,15 @@ export function CommandPalette({
                       : "text-foreground hover:bg-accent/60"
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`h-4 w-4 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
-                    <span>{cmd.name}</span>
-                    <span className="text-[10px] text-muted-foreground font-mono px-1 rounded bg-muted/60">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+                    <span className="truncate">{cmd.name}</span>
+                    <span className="text-[10px] text-muted-foreground font-mono px-1 rounded bg-muted/60 shrink-0 hidden sm:inline">
                       {cmd.category}
                     </span>
                   </div>
                   {cmd.shortcut && (
-                    <kbd className="font-mono text-[10px] bg-muted/80 text-muted-foreground px-1.5 py-0.5 rounded border border-border">
+                    <kbd className="font-mono text-[10px] bg-muted/80 text-muted-foreground px-1.5 py-0.5 rounded border border-border shrink-0 ml-2">
                       {cmd.shortcut}
                     </kbd>
                   )}
@@ -269,12 +271,12 @@ export function CommandPalette({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-border/80 bg-muted/20 px-3 py-2 text-[10px] text-muted-foreground font-mono">
+        <div className="flex items-center justify-between border-t border-border/80 bg-muted/20 px-3 py-2 text-[10px] text-muted-foreground font-mono shrink-0">
           <div className="flex items-center gap-2">
             <span>Navigate <kbd className="bg-muted px-1 rounded border border-border">↑</kbd><kbd className="bg-muted px-1 rounded border border-border">↓</kbd></span>
             <span>Select <kbd className="bg-muted px-1 rounded border border-border">↵</kbd></span>
           </div>
-          <span>RadarFlow Command Palette</span>
+          <span>RadarFlow</span>
         </div>
       </div>
     </div>

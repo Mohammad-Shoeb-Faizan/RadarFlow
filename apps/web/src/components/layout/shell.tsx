@@ -15,6 +15,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [environment, setEnvironment] = useState("production");
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useGlobalKeyboardNavigation({
@@ -62,9 +63,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   if (isAuthPage) {
     return (
-      <div className="min-h-screen bg-background text-foreground radar-grid">
+      <div className="min-h-screen bg-background text-foreground radar-grid flex items-center justify-center p-4">
         <Toaster position="top-right" theme="dark" richColors />
-        {children}
+        <div className="w-full max-w-md">{children}</div>
       </div>
     );
   }
@@ -75,6 +76,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
         onOpenCommand={() => setIsCommandOpen(true)}
+        isMobileOpen={isMobileNavOpen}
+        onCloseMobile={() => setIsMobileNavOpen(false)}
       />
 
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
@@ -83,9 +86,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           onEnvironmentChange={setEnvironment}
           onOpenCommand={() => setIsCommandOpen(true)}
           onRefresh={() => setRefreshKey((k) => k + 1)}
+          onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
         />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8" key={refreshKey}>
-          {children}
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8 min-w-0" key={refreshKey}>
+          <div className="mx-auto max-w-[1720px] w-full min-w-0">{children}</div>
         </main>
       </div>
 

@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card";
 
-interface MetricPoint {
+export interface MetricPoint {
   time: string;
   timestamp: number;
   value: number;
@@ -50,16 +50,21 @@ export function MetricChart({
   const hasData = data && data.some((d) => d.value > 0);
 
   return (
-    <Card className="border-border/80 bg-card shadow-sm overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-border/40">
-        <div>
-          <CardTitle className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
+    <Card className="border-border/80 bg-card shadow-sm overflow-hidden w-full min-w-0">
+      <CardHeader className="flex flex-wrap sm:flex-nowrap items-start sm:items-center justify-between pb-2 border-b border-border/40 gap-2">
+        <div className="min-w-0">
+          <CardTitle className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2 truncate">
             {title}
           </CardTitle>
-          {description && <CardDescription className="text-xs text-muted-foreground mt-0.5">{description}</CardDescription>}
+          {description && (
+            <CardDescription className="text-xs text-muted-foreground mt-0.5 truncate">
+              {description}
+            </CardDescription>
+          )}
         </div>
+
         {summary && (
-          <div className="flex items-center gap-3 font-mono text-[11px]">
+          <div className="flex items-center gap-2 sm:gap-3 font-mono text-[11px] shrink-0">
             {summary.avg !== undefined && (
               <div className="flex flex-col items-end">
                 <span className="text-muted-foreground text-[9px] uppercase tracking-wider">Avg</span>
@@ -90,9 +95,10 @@ export function MetricChart({
           </div>
         )}
       </CardHeader>
-      <CardContent className="pt-4">
+
+      <CardContent className="pt-3 sm:pt-4 px-2 sm:px-6">
         {!hasData && (!data || data.length === 0) ? (
-          <div className="flex h-[200px] flex-col items-center justify-center text-xs font-mono text-muted-foreground">
+          <div className="flex h-[180px] sm:h-[200px] flex-col items-center justify-center text-xs font-mono text-muted-foreground text-center p-4">
             <span>No metrics recorded for selected time range</span>
           </div>
         ) : (
@@ -109,14 +115,15 @@ export function MetricChart({
                 <XAxis
                   dataKey="time"
                   stroke="rgba(255,255,255,0.3)"
-                  fontSize={10}
+                  fontSize={9}
                   tickLine={false}
                   axisLine={false}
                   fontFamily="var(--font-mono)"
+                  interval="preserveStartEnd"
                 />
                 <YAxis
                   stroke="rgba(255,255,255,0.3)"
-                  fontSize={10}
+                  fontSize={9}
                   tickLine={false}
                   axisLine={false}
                   fontFamily="var(--font-mono)"
@@ -127,20 +134,20 @@ export function MetricChart({
                     if (active && payload && payload.length) {
                       const d = payload[0].payload as MetricPoint;
                       return (
-                        <div className="rounded-lg border border-border bg-popover/95 p-3 shadow-xl backdrop-blur-md text-xs font-mono min-w-[140px] space-y-1">
+                        <div className="rounded-lg border border-border bg-popover/95 p-2.5 sm:p-3 shadow-xl backdrop-blur-md text-xs font-mono max-w-[calc(100vw-3rem)] min-w-[130px] space-y-1 z-50">
                           <div className="text-[10px] text-muted-foreground border-b border-border/40 pb-1">
                             {d.time}
                           </div>
                           <div className="flex items-center justify-between text-foreground">
                             <span className="flex items-center gap-1.5">
-                              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+                              <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
                               <span>Average:</span>
                             </span>
                             <span className="font-bold">{d.value} {unit}</span>
                           </div>
                           {d.p95 !== undefined && d.p95 > 0 && (
                             <div className="flex items-center justify-between text-amber-400 text-[11px]">
-                              <span>p95 Percentile:</span>
+                              <span>p95:</span>
                               <span className="font-semibold">{d.p95} {unit}</span>
                             </div>
                           )}
@@ -153,7 +160,7 @@ export function MetricChart({
                           {d.count !== undefined && d.count > 0 && (
                             <div className="flex items-center justify-between text-muted-foreground text-[10px] pt-0.5">
                               <span>Samples:</span>
-                              <span>{d.count} reqs</span>
+                              <span>{d.count}</span>
                             </div>
                           )}
                         </div>

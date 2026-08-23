@@ -27,9 +27,9 @@ export function KeyboardShortcutsModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-3 sm:px-4">
       <div
-        className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-150"
+        className="w-full max-w-md rounded-xl border border-border bg-card p-4 sm:p-5 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-150 max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-border pb-3">
@@ -45,11 +45,11 @@ export function KeyboardShortcutsModal({
           </button>
         </div>
 
-        <div className="mt-4 divide-y divide-border/60">
+        <div className="mt-3 divide-y divide-border/60">
           {shortcuts.map((s) => (
             <div key={s.key} className="flex items-center justify-between py-2 text-xs">
               <span className="text-muted-foreground">{s.desc}</span>
-              <kbd className="font-mono text-[11px] bg-muted px-2 py-0.5 rounded border border-border font-semibold text-foreground">
+              <kbd className="font-mono text-[10px] sm:text-[11px] bg-muted px-2 py-0.5 rounded border border-border font-semibold text-foreground shrink-0 ml-2">
                 {s.key}
               </kbd>
             </div>
@@ -98,35 +98,40 @@ export function useGlobalKeyboardNavigation({
         return;
       }
 
+      // Sequence navigation: "g then o", "g then s", etc.
       const key = e.key.toLowerCase();
-      const newSeq = [...keySequence, key].slice(-2);
-      setKeySequence(newSeq);
+      if (key === "g" && keySequence.length === 0) {
+        setKeySequence(["g"]);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => setKeySequence([]), 1000);
+        return;
+      }
 
-      clearTimeout(timeout);
-      timeout = setTimeout(() => setKeySequence([]), 1000);
-
-      const seqStr = newSeq.join("");
-      if (seqStr === "go") {
-        router.push("/");
+      if (keySequence[0] === "g") {
+        if (key === "o") {
+          e.preventDefault();
+          router.push("/");
+        } else if (key === "s") {
+          e.preventDefault();
+          router.push("/services");
+        } else if (key === "i") {
+          e.preventDefault();
+          router.push("/incidents");
+        } else if (key === "l") {
+          e.preventDefault();
+          router.push("/logs");
+        } else if (key === "m") {
+          e.preventDefault();
+          router.push("/metrics");
+        } else if (key === "t") {
+          e.preventDefault();
+          router.push("/traces");
+        } else if (key === "d") {
+          e.preventDefault();
+          router.push("/deployments");
+        }
         setKeySequence([]);
-      } else if (seqStr === "gs") {
-        router.push("/services");
-        setKeySequence([]);
-      } else if (seqStr === "gi") {
-        router.push("/incidents");
-        setKeySequence([]);
-      } else if (seqStr === "gl") {
-        router.push("/logs");
-        setKeySequence([]);
-      } else if (seqStr === "gm") {
-        router.push("/metrics");
-        setKeySequence([]);
-      } else if (seqStr === "gt") {
-        router.push("/traces");
-        setKeySequence([]);
-      } else if (seqStr === "gd") {
-        router.push("/deployments");
-        setKeySequence([]);
+        clearTimeout(timeout);
       }
     };
 
