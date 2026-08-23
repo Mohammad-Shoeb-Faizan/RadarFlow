@@ -1,4 +1,4 @@
-import { RadarFlow } from "../client.js";
+import { RadarFlow } from "../client";
 
 export function withRadarFlowRoute<T extends (...args: any[]) => any>(
   radar: RadarFlow,

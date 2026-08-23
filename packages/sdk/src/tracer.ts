@@ -1,4 +1,4 @@
-import { SpanPayload } from "./types.js";
+import { SpanPayload } from "./types";
 
 function generateHexId(bytes: number): string {
   const chars = "0123456789abcdef";

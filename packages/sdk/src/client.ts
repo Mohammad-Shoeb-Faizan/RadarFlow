@@ -6,8 +6,8 @@ import {
   EventPayload,
   TelemetryBatch,
   LogLevel,
-} from "./types.js";
-import { Span, SpanOptions } from "./tracer.js";
+} from "./types";
+import { Span, SpanOptions } from "./tracer";
 
 export class RadarFlow {
   private config: Required<Omit<RadarFlowConfig, "release" | "onError">> & {

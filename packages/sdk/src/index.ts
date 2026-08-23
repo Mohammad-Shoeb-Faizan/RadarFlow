@@ -1,5 +1,5 @@
-export { RadarFlow } from "./client.js";
-export { Span, generateTraceId, generateSpanId } from "./tracer.js";
+export { RadarFlow } from "./client";
+export { Span, generateTraceId, generateSpanId } from "./tracer";
 export type {
   RadarFlowConfig,
   MetricPayload,
@@ -9,6 +9,6 @@ export type {
   TelemetryBatch,
   LogLevel,
   Environment,
-} from "./types.js";
-export { radarflowExpress } from "./integrations/express.js";
-export { withRadarFlowRoute } from "./integrations/next.js";
+} from "./types";
+export { radarflowExpress } from "./integrations/express";
+export { withRadarFlowRoute } from "./integrations/next";
