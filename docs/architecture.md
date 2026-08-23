@@ -30,7 +30,7 @@ flowchart TD
 
     subgraph AI Investigation Layer
         IncidentDB --> AIProviderFactory["AI Provider Factory"]
-        AIProviderFactory -->|Structured Prompts| Gemini["Google Gemini 2.0 Flash"]
+        AIProviderFactory -->|Structured Prompts| Gemini["Google Gemini 2.5 Flash"]
         Gemini -->|Strict JSON Schema| StructuredAnalysis["Root Cause & Evidence"]
         StructuredAnalysis --> DB
     end

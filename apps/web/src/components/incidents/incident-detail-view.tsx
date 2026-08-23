@@ -279,7 +279,7 @@ export function IncidentDetailView({
                       AI Root Cause Analysis
                     </CardTitle>
                     <span className="text-[10px] font-mono text-muted-foreground block">
-                      Powered by Gemini 2.0 Flash • Analyzes telemetry, logs, and deployments
+                      Powered by Gemini 2.5 Flash • Analyzes telemetry, logs, and deployments
                     </span>
                   </div>
                 </div>

@@ -31,7 +31,7 @@ flowchart LR
     Logs[Error Logs & Stacks] --> Aggregator
     Traces[Slow / Error Spans] --> Aggregator
     Aggregator --> Prompt[Structured Prompt & Schema]
-    Prompt --> Gemini[Google Gemini 2.0 Flash]
+    Prompt --> Gemini[Google Gemini 2.5 Flash]
     Gemini --> Findings[Structured Diagnosis]
 ```
 
